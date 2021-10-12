@@ -1,3 +1,6 @@
+# Running experimento from command line changing arguments from argparse
+python3 src/models/train_model.py --learning_rate 0.1
+
 # Predict mlflow using command line
 mlflow models predict -m 'runs:/69d31055bbd045e88c20fa36fde52253/model' -i  'data/processed/casas_X.csv' -t 'csv' -o 'data/processed/precos2.csv'
 
@@ -5,4 +8,14 @@ mlflow models predict -m 'runs:/69d31055bbd045e88c20fa36fde52253/model' -i  'dat
 mlflow models serve  -m 'runs:/69d31055bbd045e88c20fa36fde52253/model' -p 5001 
 
 # Running mlflow using sqlite on backend - Now we can see models page in UI 
-msasso@Matheuss-MBP mlops_complete_moc_project % mlflow server --backend-store-uri sqlite:///mlflow.db --default-artifact-root ./artifacts --host 0.0.0.0
+mlflow server --backend-store-uri sqlite:///mlflow.db --default-artifact-root ./artifacts --host 0.0.0.0
+
+# Serving a model using a fixed name (Not hard coded using the [run_id]) - Scalable!
+export MLFLOW_TRACKING_URI=http://127.0.0.1:5000
+mlflow models serve -m 'models:/House-Price/Production' -p 5001 
+
+# Creating docker image with the project Production enverionment
+mlflow models build-docker -m 'models:/House-Price/Production' -n "house-prices"
+
+# Deploy API with docker image
+docker run -p 5001:8080 "house-prices"

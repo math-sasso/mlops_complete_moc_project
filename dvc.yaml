@@ -1,0 +1,39 @@
+stages:
+  prepare:
+    cmd: python3 src/prepare.py
+    deps:
+    - data/raw/casas.csv
+    - src/prepare.py
+    params:
+    - prepare.eval_size_from_data
+    - prepare.seed
+    outs:
+    - data/prepared/X_train.csv
+    - data/prepared/y_train.csv
+    - data/prepared/X_valid.csv
+    - data/prepared/y_valid.csv
+    - data/prepared/X_test.csv
+    - data/prepared/y_test.csv
+
+  train:
+    cmd: python3 src/train.py
+    deps:
+    - data/prepared/X_train.csv
+    - data/prepared/y_train.csv
+    - data/prepared/X_valid.csv
+    - data/prepared/y_valid.csv
+    - src/train.py
+    params:
+    - prepare.eval_size_from_data
+    - prepare.seed
+    outs:
+    - data/train/model.pkl
+   
+  evaluate:
+    cmd: python3 src/evaluate.py
+    deps:
+    - data/train/model.pkl
+    - src/evaluate.py
+    outs:
+    - data/evaluation/test_metrics.json
+    - data/evaluation/histograms.png

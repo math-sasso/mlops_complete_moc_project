@@ -1,0 +1,76 @@
+schema: '2.0'
+stages:
+  prepare:
+    cmd: python3 src/prepare.py
+    deps:
+    - path: data/raw/casas.csv
+      md5: cd74756b51070d5ce35a2010503a40d1
+      size: 30277
+    - path: src/prepare.py
+      md5: bf7d72319bad544062f91d938612edc7
+      size: 1635
+    params:
+      params.yaml:
+        prepare.eval_size_from_data: 0.3
+        prepare.seed: 42
+    outs:
+    - path: data/prepared/X_test.csv
+      md5: 033ffe15938866b4b408665b126dd3cd
+      size: 3741
+    - path: data/prepared/X_train.csv
+      md5: 2545e5bb4fefb6e3f29e872f43d55030
+      size: 17440
+    - path: data/prepared/X_valid.csv
+      md5: 60c1f8ce3574c12db93ec3a3fcc04c2f
+      size: 3756
+    - path: data/prepared/y_test.csv
+      md5: 39acca8778c7bd2975e92b4a8a60651a
+      size: 2453
+    - path: data/prepared/y_train.csv
+      md5: 32e12580accc1b3ab8aecb3f7865fcb4
+      size: 11410
+    - path: data/prepared/y_valid.csv
+      md5: c3dbd8981f86594969fb73a97f27bd09
+      size: 2454
+  train:
+    cmd: python3 src/train.py
+    deps:
+    - path: data/prepared/X_train.csv
+      md5: 2545e5bb4fefb6e3f29e872f43d55030
+      size: 17440
+    - path: data/prepared/X_valid.csv
+      md5: 60c1f8ce3574c12db93ec3a3fcc04c2f
+      size: 3756
+    - path: data/prepared/y_train.csv
+      md5: 32e12580accc1b3ab8aecb3f7865fcb4
+      size: 11410
+    - path: data/prepared/y_valid.csv
+      md5: c3dbd8981f86594969fb73a97f27bd09
+      size: 2454
+    - path: src/train.py
+      md5: 9e743f5fa7a296194ba565889accec20
+      size: 1956
+    params:
+      params.yaml:
+        prepare.eval_size_from_data: 0.3
+        prepare.seed: 42
+    outs:
+    - path: data/train/model.pkl
+      md5: 852df21c2fc6380aae65e935f5eeb1e1
+      size: 4205185
+  evaluate:
+    cmd: python3 src/evaluate.py
+    deps:
+    - path: data/train/model.pkl
+      md5: 852df21c2fc6380aae65e935f5eeb1e1
+      size: 4205185
+    - path: src/evaluate.py
+      md5: 7460bb4e6f54d19f94f9ee575ee0a634
+      size: 1183
+    outs:
+    - path: data/evaluation/histograms.png
+      md5: 6ebf1440db068afa03046b92494d5f22
+      size: 11889
+    - path: data/evaluation/test_metrics.json
+      md5: 1fb9d73bfaae33e4f655109e3fedd37b
+      size: 79

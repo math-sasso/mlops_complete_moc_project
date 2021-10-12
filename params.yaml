@@ -1,0 +1,10 @@
+prepare:
+  eval_size_from_data: 0.3
+  test_size_from_eval: 0.5
+  seed: 42
+
+train:
+  seed: 42
+  max_depth: 10
+
+  

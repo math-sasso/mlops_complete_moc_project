@@ -1,0 +1,5 @@
+dvc run -n prepare \
+  -p prepare.eval_size_from_data,prepare.eval_size_from_data,prepare.seed \
+  -d src/prepare.py -d data/raw/casas.csv \
+  -o data/prepared/X_train.csv \
+  python3 src/prepare.py
